@@ -20,9 +20,6 @@ from rest_framework.response import (
     Response
 )
 
-from inventory.ocr.service import (
-    process_purchase_invoice
-)
 
 
 # ... (CategoryViewSet and VendorViewSet remain the same) ...
@@ -149,13 +146,14 @@ class PurchaseViewSet(viewsets.ModelViewSet):
     # REMOVED the custom create() method. 
     
     @action(
-        detail=False,
-        methods=["post"],
-        url_path="ocr"
+    detail=False,
+    methods=["post"],
+    url_path="ocr"
     )
     def ocr(self, request):
 
         try:
+            from inventory.ocr.service import process_purchase_invoice  # ← import moved here
 
             uploaded = (
                 request.FILES.get(
