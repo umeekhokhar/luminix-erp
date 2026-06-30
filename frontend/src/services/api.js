@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// 1. Prioritize Netlify's config variable, fall back to local development if missing
+// Dynamically handle production URL vs local environment without the extra '/api' string
 const API_BASE_URL = process.env.REACT_APP_API_URL 
-    ? `${process.env.REACT_APP_API_URL}/api` 
-    : 'http://127.0.0.1:8000/api';
+    ? process.env.REACT_APP_API_URL 
+    : 'http://127.0.0.1:8000';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
