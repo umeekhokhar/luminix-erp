@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+// 1. Prioritize Netlify's config variable, fall back to local development if missing
+const API_BASE_URL = process.env.REACT_APP_API_URL 
+    ? `${process.env.REACT_APP_API_URL}/api` 
+    : 'http://127.0.0.1:8000/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -8,7 +11,6 @@ const api = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
 // Add token to requests
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('access_token');
