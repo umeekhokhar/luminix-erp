@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(dotenv_path=BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -155,11 +158,5 @@ REST_FRAMEWORK = {
 # backend/settings.py
 
 GEMINI_API_KEYS = [
-    "AQ.Ab8RN6I5sAuGTJdIv5nwrSxwghayS8eyoYf3IuPZQ_blo3R7VQ",
-    "AQ.Ab8RN6KoGI0PPwUniJf2EHEBubrhxVoiLOaGj6hKGRTerl7VZg",
-    "AQ.Ab8RN6JkD4htCPos7HLRPkJSMHM4hNX0_ncvRDKDaXSNVXSemg",
-    "AQ.Ab8RN6LxOFT_MaNQ17SGC4CM_fQhEEAWRvFwuUaqpRpGaidBOA",
-    "AQ.Ab8RN6ImofJs4FfzmRsW2CrmpavuOY6mUhgJy2mDgDFLnmBAuw",
-    "AQ.Ab8RN6K4xb5e13BTwfAUYQFfCGZ8FXys2SnWVClzUfQUBOrXUg",
-    "AQ.Ab8RN6IvQ9uLRr3YmqkdWVX2jsoQdaoa_usas3owtlkSnIc2dQ",
+   os.getenv("GEMINI_API_KEY")
 ]

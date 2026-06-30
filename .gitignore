@@ -8,3 +8,6 @@ frontend/build/
 backend/venv/
 backend/__pycache__/
 *.pyc
+# Ignore local environment secrets
+.env
+backend/.env

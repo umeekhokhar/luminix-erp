@@ -5,7 +5,7 @@
 
 import os
 import json
-
+import traceback
 from django.conf import settings
 from django.db.models import Sum, Count, Q
 from django.utils import timezone
@@ -1152,59 +1152,31 @@ RULES:
 
             )
 
+        
+
         for key in settings.GEMINI_API_KEYS:
-
             try:
-
-                client = (
-                    genai.Client(
-                        api_key=key
-                    )
+                client = genai.Client(api_key=key)
+                cfg = types.GenerateContentConfig(
+                    system_instruction=system,
+                    temperature=0.2,
+                    tools=tools
                 )
-
-                cfg = (
-                    types.GenerateContentConfig(
-
-                        system_instruction=system,
-
-                        temperature=0.2,
-
-                        tools=tools
-
-                    )
+                chat = client.chats.create(
+                    model="gemini-2.5-flash",
+                    history=formatted,
+                    config=cfg
                 )
-
-                chat = (
-                    client.chats.create(
-                        model="gemini-2.5-flash",
-                        history=formatted,
-                        config=cfg
-                    )
-                )
-
-                response = (
-                    chat.send_message(
-                        user_message
-                    )
-                )
-
-                return Response({
-
-                    "reply":
-                        response.text
-
-                })
-
-            except Exception:
-
+                response = chat.send_message(user_message)
+                return Response({"reply": response.text})
+            
+            except Exception as e:
+                print("====== GEMINI KEY ATTEMPT FAILED ======")
+                traceback.print_exc()  # <--- THIS WILL PRINT THE EXACT ERROR IN POWERSHELL
+                print("=======================================")
                 continue
 
-        return Response({
-
-            "reply":
-                "AI unavailable."
-
-        })
+        return Response({"reply": "AI unavailable."})
 
 # ======================================================================
 # END OF FILE
