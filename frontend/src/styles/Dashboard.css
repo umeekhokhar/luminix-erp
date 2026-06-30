@@ -1,0 +1,414 @@
+/* --- LUMINIX FUTURISTIC THEME VARIABLES --- */
+:root {
+    --bg-dark: #050509;
+    --bg-card: rgba(20, 20, 35, 0.6);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #8b8b9a;
+    --text-muted: #535362;
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Roboto Mono', monospace; /* Nice for numbers */
+    
+    /* Accents */
+    --color-ai: #00f2fe;
+    --glow-ai: 0 0 15px rgba(0, 242, 254, 0.5);
+  }
+  
+  /* --- GLOBAL RESET for Dashboard --- */
+  .lux-dashboard * {
+    box-sizing: border-color;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .mono {
+    font-family: var(--font-mono) !important;
+    letter-spacing: -0.5px;
+  }
+  
+  .thin {
+    font-weight: 200;
+    color: var(--text-secondary);
+  }
+  
+  /* --- CONTAINER & BACKGROUND --- */
+  .lux-dashboard {
+    background-color: var(--bg-dark);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+  }
+  
+  /* Futuristic background globe glow */
+  .lux-bg-globe {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(5, 5, 9, 0) 70%);
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+  }
+  
+  .lux-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  
+  /* --- LOADER --- */
+  .lux-loader-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: var(--bg-dark);
+  }
+  
+  .lux-loader {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--color-ai);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+    box-shadow: var(--glow-ai);
+  }
+  
+  /* --- HEADER --- */
+  .lux-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+  
+  .lux-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
+  }
+  
+  .lux-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .status-good {
+    color: #10b981;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+  
+  .ai-status-bubble {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 242, 254, 0.05);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: var(--color-ai);
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: var(--glow-ai);
+  }
+  
+  .icon-pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  /* --- STATS GRID --- */
+  .lux-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .lux-stat-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+  
+  .lux-stat-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  /* The abstract glow behind the icon */
+  .card-glow {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0.15;
+    z-index: 0;
+  }
+  
+  .card-inner {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .card-alert {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.03);
+  }
+  
+  /* --- MID SECTION (Sub stats & AI placeholder) --- */
+  .lux-mid-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .sub-stats-glass {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    backdrop-filter: blur(10px);
+  }
+  
+  .sub-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .sub-stat .label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .sub-stat .value {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .sub-stat.separator {
+    width: 1px;
+    height: 30px;
+    background-color: var(--border-color);
+  }
+  
+  .alert-text {
+    color: #ef4444;
+  }
+  
+  /* PREDICTIVE AI PANE PLACEHOLDER */
+  .ai-predictive-pane {
+    position: relative;
+    background: linear-gradient(135deg, rgba(20, 20, 35, 0.6) 0%, rgba(10, 30, 40, 0.6) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+  
+  .ai-predictive-pane h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .ai-placeholder-text {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+  
+  .ai-sparkle-corner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: rgba(16, 185, 129, 0.3);
+  }
+  
+  /* --- DATA SECTION (TABLES) --- */
+  .lux-data-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .lux-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+  }
+  
+  .table-card {
+    padding: 1.5rem;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .view-all {
+    font-size: 0.8rem;
+    color: var(--color-ai);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  
+  .view-all:hover {
+    opacity: 1;
+  }
+  
+  /* --- MINIMALIST TABLE --- */
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .lux-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  
+  .lux-table thead th {
+    text-align: left;
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+  
+  .lux-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.2s;
+  }
+  
+  .lux-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  .lux-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+  
+  .lux-table td {
+    padding: 1rem 0;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  /* --- BADGES --- */
+  .lux-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+  }
+  
+  /* Status colors based on your backend choices */
+  .badge-pending { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); }
+  .badge-shipped, .badge-paid { color: #10b981; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
+  .badge-delivered { color: #3b82f6; border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); }
+  .badge-cancelled, .badge-unpaid { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); }
+  
+  .no-data-pane {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+    background: rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  /* --- ANIMATIONS --- */
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.5; box-shadow: 0 0 5px rgba(0, 242, 254, 0.2); }
+    50% { opacity: 1; box-shadow: 0 0 15px rgba(0, 242, 254, 0.6); }
+    100% { opacity: 0.5; box-shadow: 0 0 5px rgba(0, 242, 254, 0.2); }
+  }
+  
+  /* --- RESPONSIVE ADJUSTMENTS --- */
+  @media (max-width: 1024px) {
+    .lux-mid-section, .lux-data-section {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .lux-dashboard { padding: 1rem; }
+    .lux-header { flex-direction: column; gap: 1rem; }
+    .sub-stats-glass { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .sub-stat.separator { display: none; }
+  }

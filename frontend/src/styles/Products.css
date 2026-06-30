@@ -1,0 +1,115 @@
+.products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.products-container h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 24px;
+}
+
+.product-form {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.product-form input,
+.product-form textarea,
+.product-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.product-form button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-form button:hover:not(:disabled) {
+    background-color: #2563eb;
+}
+
+.product-form button:disabled {
+    background-color: #93c5fd;
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.products-table th {
+    background-color: #f9fafb;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.products-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.products-table tr:hover {
+    background-color: #f9fafb;
+}
+
+.products-table button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.products-table button:hover {
+    background-color: #2563eb;
+}
+
+.products-table button:last-child {
+    background-color: #ef4444;
+    margin-right: 0;
+}
+
+.products-table button:last-child:hover {
+    background-color: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .product-form {
+        grid-template-columns: 1fr;
+    }
+    .products-table {
+        font-size: 12px;
+    }
+    .products-table button {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+}
