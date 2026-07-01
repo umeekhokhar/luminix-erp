@@ -283,6 +283,7 @@ export default function ChatbotWidget({ userRole = 'admin' }) {
                 {msg.isBot ? (
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
+                    skipHtml
                     components={{
                       ul: (props) => (
                         <ul
