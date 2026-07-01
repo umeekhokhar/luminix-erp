@@ -111,10 +111,34 @@ export default function ChatbotWidget({ userRole = 'admin' }) {
   );
 
       if (response.data && response.data.reply) {
-        setMessages((prev) => [...prev, { text: response.data.reply, isBot: true }]);
-      } else {
-        setMessages((prev) => [...prev, { text: "I encountered a minor sorting hitch on that payload. Could you rephrase?", isBot: true }]);
-      }
+
+  console.log("AI Reply:", response.data.reply);
+  console.log("Reply type:", typeof response.data.reply);
+
+  const safeReply =
+    typeof response.data.reply === "string"
+      ? response.data.reply
+      : JSON.stringify(response.data.reply, null, 2);
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      text: safeReply,
+      isBot: true
+    }
+  ]);
+
+} else {
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      text: "I encountered a minor sorting hitch on that payload. Could you rephrase?",
+      isBot: true
+    }
+  ]);
+
+}
 
     } catch (error) {
       console.error("Chatbot network error:", error);
