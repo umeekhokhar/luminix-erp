@@ -3,6 +3,10 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL 
+    ? process.env.REACT_APP_API_URL 
+    : 'http://127.0.0.1:8000/api';
+
 // Premium array of context-aware processing phrases
 const LOADING_PHRASES = [
   "Consulting the ledger mainframes...",
@@ -40,7 +44,7 @@ export default function ChatbotWidget({ userRole = 'admin' }) {
           return;
         }
 
-        const response = await axios.get('http://127.0.0.1:8000/api/dashboard/summary/', {
+        const response = await axios.get(`${API_BASE_URL}/dashboard/summary/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -91,20 +95,20 @@ export default function ChatbotWidget({ userRole = 'admin' }) {
       const token = localStorage.getItem('access_token');
       
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/dashboard/chat/', 
-        {
-          userMessage: inputValue,
-          userRole: userRole,
-          currentScreenData: systemMetrics || { status: "Metrics preloading" },
-          history: formattedHistory // Sending thread history structure
-        },
-        {
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+    `${API_BASE_URL}/dashboard/chat/`, 
+    {
+      userMessage: inputValue,
+      userRole: userRole,
+      currentScreenData: systemMetrics || { status: "Metrics preloading" },
+      history: formattedHistory
+    },
+    {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json'
+      }
+    }
+  );
 
       if (response.data && response.data.reply) {
         setMessages((prev) => [...prev, { text: response.data.reply, isBot: true }]);
