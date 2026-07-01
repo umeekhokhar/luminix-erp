@@ -284,34 +284,111 @@ export default function ChatbotWidget({ userRole = 'admin' }) {
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      ul: ({ node, ...props }) => <ul style={{ margin: '4px 0', paddingLeft: '20px' }} {...props} />,
-                      ol: ({ node, ...props }) => <ol style={{ margin: '4px 0', paddingLeft: '20px' }} {...props} />,
-                      li: ({ node, ...props }) => <li style={{ marginBottom: '3px' }} {...props} />,
-                      p: ({ node, ...props }) => <p style={{ margin: '0 0 6px 0' }} {...props} />,
-                      strong: ({ node, ...props }) => <strong style={{ fontWeight: '600', color: '#0f172a' }} {...props} />,
-                      table: ({ node, ...props }) => (
-                        <div style={{ overflowX: 'auto', margin: '6px 0', maxWidth: '100%' }}>
-                          <table style={{ borderCollapse: 'collapse', fontSize: '12px', width: 'max-content' }} {...props} />
+                      ul: (props) => (
+                        <ul
+                          style={{
+                            margin: '4px 0',
+                            paddingLeft: '20px'
+                          }}
+                          {...props}
+                        />
+                      ),
+
+                      ol: (props) => (
+                        <ol
+                          style={{
+                            margin: '4px 0',
+                            paddingLeft: '20px'
+                          }}
+                          {...props}
+                        />
+                      ),
+
+                      li: (props) => (
+                        <li
+                          style={{
+                            marginBottom: '3px'
+                          }}
+                          {...props}
+                        />
+                      ),
+
+                      p: (props) => (
+                        <p
+                          style={{
+                            margin: '0 0 6px'
+                          }}
+                          {...props}
+                        />
+                      ),
+
+                      strong: (props) => (
+                        <strong
+                          style={{
+                            fontWeight: 600
+                          }}
+                          {...props}
+                        />
+                      ),
+
+                      table: ({ children }) => (
+                        <div
+                          style={{
+                            overflowX: 'auto',
+                            width: '100%'
+                          }}
+                        >
+                          <table
+                            style={{
+                              borderCollapse: 'collapse',
+                              width: '100%'
+                            }}
+                          >
+                            {children}
+                          </table>
                         </div>
                       ),
-                      thead: ({ node, ...props }) => <thead style={{ backgroundColor: '#f1f5f9' }} {...props} />,
-                      th: ({ node, ...props }) => (
-                        <th style={{
-                          border: '1px solid #e2e8f0',
-                          padding: '6px 8px',
-                          textAlign: 'left',
-                          fontWeight: '600',
-                          color: '#0f172a',
-                          whiteSpace: 'nowrap'
-                        }} {...props} />
+
+                      thead: ({ children }) => (
+                        <thead
+                          style={{
+                            background: '#f1f5f9'
+                          }}
+                        >
+                          {children}
+                        </thead>
                       ),
-                      td: ({ node, ...props }) => (
-                        <td style={{
-                          border: '1px solid #e2e8f0',
-                          padding: '6px 8px',
-                          whiteSpace: 'nowrap'
-                        }} {...props} />
+
+                      tbody: ({ children }) => (
+                        <tbody>{children}</tbody>
+                      ),
+
+                      tr: ({ children }) => (
+                        <tr>{children}</tr>
+                      ),
+
+                      th: ({ children }) => (
+                        <th
+                          style={{
+                            border: '1px solid #ddd',
+                            padding: '8px'
+                          }}
+                        >
+                          {children}
+                        </th>
+                      ),
+
+                      td: ({ children }) => (
+                        <td
+                          style={{
+                            border: '1px solid #ddd',
+                            padding: '8px'
+                          }}
+                        >
+                          {children}
+                        </td>
                       )
+
                     }}
                   >
                     {msg.text}
