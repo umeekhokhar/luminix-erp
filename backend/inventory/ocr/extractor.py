@@ -1,5 +1,6 @@
 from rapidocr_onnxruntime import RapidOCR
 from PIL import Image
+import numpy as np
 import fitz
 
 
@@ -39,7 +40,9 @@ def extract_text(uploaded_file):
                     pix.samples
                 )
 
-                result, _ = ocr_engine(image)
+                image_array = np.array(image)
+
+                result, _ = ocr_engine(image_array)
 
                 if result:
 
@@ -59,10 +62,12 @@ def extract_text(uploaded_file):
         # IMAGE
         image = Image.open(
             uploaded_file
-        )
+        ).convert("RGB")
+
+        image_array = np.array(image)
 
         result, _ = ocr_engine(
-            image
+            image_array
         )
 
         if not result:
