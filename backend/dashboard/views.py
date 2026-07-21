@@ -5,7 +5,7 @@
 
 import os
 import json
-import traceback
+import logging
 from django.conf import settings
 from django.db.models import Sum, Count, Q
 from django.utils import timezone
@@ -27,6 +27,8 @@ from accounting.models import (
     VendorLedger,
     VendorTransaction,
 )
+
+logger = logging.getLogger(__name__)
 
 # ======================================================================
 # AI TOOL FUNCTIONS
@@ -490,6 +492,55 @@ def query_system_demand_forecast(query: str) -> str:
         "forecast_period": "30 days",
         "status": "Positive demand trend detected"
     })
+
+
+# ======================================================================
+# CHATBOT CONFIG (module-level constants — built once, not per-request)
+# ======================================================================
+
+CHATBOT_TOOLS = [
+    list_all_customers,
+    lookup_customer_profile,
+    lookup_product_inventory,
+    list_all_products,
+    list_all_orders,
+    list_all_invoices,
+    list_all_inventory,
+    fetch_account_ledger_summary,
+    query_system_demand_forecast,
+]
+
+CHATBOT_SYSTEM_PROMPT = """
+You are Luminix ERP Copilot.
+
+RULES:
+
+1 Return detailed data.
+
+2 Never summarize lists.
+
+3 Use markdown.
+
+4 Show complete order details.
+
+5 Show customers in tables.
+
+6 Show invoices.
+
+7 Prefer structured ERP output.
+"""
+
+# Substrings that indicate a Gemini call failed because of rate limiting /
+# quota exhaustion (as opposed to a genuine bug in the request). Only these
+# should trigger a retry with the next API key.
+_RATE_LIMIT_MARKERS = ("RESOURCE_EXHAUSTED", "429", "quota")
+
+
+def _is_rate_limit_error(e: Exception) -> bool:
+    status = getattr(e, "status_code", None) or getattr(e, "code", None)
+    if status == 429:
+        return True
+    return any(marker.lower() in str(e).lower() for marker in _RATE_LIMIT_MARKERS)
 
 
 # ======================================================================
@@ -1077,50 +1128,6 @@ class DashboardViewSet(viewsets.ViewSet):
                 status=400
             )
 
-        tools = [
-
-            list_all_customers,
-
-            lookup_customer_profile,
-
-            lookup_product_inventory,
-
-            list_all_products,
-
-            list_all_orders,
-
-            list_all_invoices,
-
-            list_all_inventory,
-
-            fetch_account_ledger_summary,
-
-            query_system_demand_forecast,
-
-        ]
-
-        system = """
-
-You are Luminix ERP Copilot.
-
-RULES:
-
-1 Return detailed data.
-
-2 Never summarize lists.
-
-3 Use markdown.
-
-4 Show complete order details.
-
-5 Show customers in tables.
-
-6 Show invoices.
-
-7 Prefer structured ERP output.
-
-"""
-
         formatted = []
 
         for msg in history:
@@ -1152,15 +1159,15 @@ RULES:
 
             )
 
-        
+        last_error = None
 
-        for key in settings.GEMINI_API_KEYS:
+        for i, key in enumerate(settings.GEMINI_API_KEYS):
             try:
                 client = genai.Client(api_key=key)
                 cfg = types.GenerateContentConfig(
-                    system_instruction=system,
+                    system_instruction=CHATBOT_SYSTEM_PROMPT,
                     temperature=0.2,
-                    tools=tools
+                    tools=CHATBOT_TOOLS
                 )
                 chat = client.chats.create(
                     model="gemini-2.5-flash",
@@ -1169,14 +1176,29 @@ RULES:
                 )
                 response = chat.send_message(user_message)
                 return Response({"reply": response.text})
-            
-            except Exception as e:
-                print("====== GEMINI KEY ATTEMPT FAILED ======")
-                traceback.print_exc()  # <--- THIS WILL PRINT THE EXACT ERROR IN POWERSHELL
-                print("=======================================")
-                continue
 
-        return Response({"reply": "AI unavailable."})
+            except Exception as e:
+                last_error = e
+
+                if _is_rate_limit_error(e):
+                    logger.warning(
+                        "Gemini key #%d hit a rate limit, trying next key", i
+                    )
+                    continue
+
+                # Not a quota issue — another key won't fix this, so stop
+                # burning attempts and surface the real problem.
+                logger.exception("Gemini chatbot request failed (non-rate-limit)")
+                return Response(
+                    {"reply": "AI request failed. Please try again."},
+                    status=500
+                )
+
+        logger.error("All Gemini API keys exhausted: %s", last_error)
+        return Response(
+            {"reply": "AI is temporarily at capacity. Please try again shortly."},
+            status=503
+        )
 
 # ======================================================================
 # END OF FILE

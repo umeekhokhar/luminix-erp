@@ -157,7 +157,23 @@ REST_FRAMEWORK = {
 }
 
 # backend/settings.py
-
+#
+# Gemini API keys used by the ERP chatbot (dashboard/views.py::quick_chatbot).
+# Add GEMINI_API_KEY_2 / _3 / _4 etc. to your .env locally and to the
+# Railway environment variables panel for each deployed environment.
+# Unset keys are filtered out automatically, so you can add more later
+# without touching this file again.
 GEMINI_API_KEYS = [
-   os.getenv("GEMINI_API_KEY")
+    key for key in [
+        os.getenv("GEMINI_API_KEY"),
+        os.getenv("GEMINI_API_KEY_2"),
+        os.getenv("GEMINI_API_KEY_3"),
+        os.getenv("GEMINI_API_KEY_4"),
+    ] if key
 ]
+
+if not GEMINI_API_KEYS:
+    raise ValueError(
+        "No Gemini API keys configured. Set GEMINI_API_KEY (and optionally "
+        "GEMINI_API_KEY_2/_3/_4) in your .env or Railway environment variables."
+    )
