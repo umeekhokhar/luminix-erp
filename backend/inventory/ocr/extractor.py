@@ -4,7 +4,11 @@ import numpy as np
 import fitz
 
 
-ocr_engine = RapidOCR()
+ocr_engine = RapidOCR(
+    rec_batch_num=1,
+    intra_op_num_threads=1,
+    inter_op_num_threads=1,
+)
 
 
 def extract_text(uploaded_file):
@@ -32,7 +36,7 @@ def extract_text(uploaded_file):
 
             for page in pdf:
 
-                pix = page.get_pixmap()
+                pix = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5))  # ~108 DPI instead of default 96 — adjust down if still tight
 
                 image = Image.frombytes(
                     "RGB",
@@ -41,6 +45,7 @@ def extract_text(uploaded_file):
                 )
 
                 image_array = np.array(image)
+                image.thumbnail((1800, 1800))
 
                 result, _ = ocr_engine(image_array)
 
