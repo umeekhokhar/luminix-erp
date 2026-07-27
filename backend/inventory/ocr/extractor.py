@@ -2,6 +2,9 @@ from rapidocr_onnxruntime import RapidOCR
 from PIL import Image
 import numpy as np
 import fitz
+from streamlit import image
+import logging
+import traceback
 
 
 ocr_engine = RapidOCR(
@@ -10,6 +13,7 @@ ocr_engine = RapidOCR(
     inter_op_num_threads=1,
 )
 
+logger = logging.getLogger(__name__)
 
 def extract_text(uploaded_file):
     """
@@ -36,16 +40,11 @@ def extract_text(uploaded_file):
 
             for page in pdf:
 
-                pix = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5))  # ~108 DPI instead of default 96 — adjust down if still tight
+                pix = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5))
 
-                image = Image.frombytes(
-                    "RGB",
-                    [pix.width, pix.height],
-                    pix.samples
-                )
-
-                image_array = np.array(image)
-                image.thumbnail((1800, 1800))
+                image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                image.thumbnail((1800, 1800))          # resize first
+                image_array = np.array(image)          # then convert
 
                 result, _ = ocr_engine(image_array)
 
@@ -84,7 +83,5 @@ def extract_text(uploaded_file):
         )
 
     except Exception as e:
-
-        raise Exception(
-            f"OCR extraction failed: {str(e)}"
-        )
+        logger.error("OCR extraction failed:\n%s", traceback.format_exc())
+        raise
