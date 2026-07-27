@@ -1,10 +1,11 @@
-from rapidocr_onnxruntime import RapidOCR
-from PIL import Image
-import numpy as np
-import fitz
-from streamlit import image
+import gc
 import logging
 import traceback
+
+import fitz
+import numpy as np
+from PIL import Image
+from rapidocr_onnxruntime import RapidOCR
 
 
 ocr_engine = RapidOCR(
@@ -14,6 +15,7 @@ ocr_engine = RapidOCR(
 )
 
 logger = logging.getLogger(__name__)
+
 
 def extract_text(uploaded_file):
     """
@@ -40,39 +42,38 @@ def extract_text(uploaded_file):
 
             for page in pdf:
 
-                pix = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5))
+                # Lower zoom = cheaper render + smaller peak memory.
+                # Bump back to 1.5 only if OCR accuracy suffers on real documents.
+                pix = page.get_pixmap(matrix=fitz.Matrix(1.2, 1.2))
 
                 image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-                image.thumbnail((1800, 1800))          # resize first
-                image_array = np.array(image)          # then convert
+                image.thumbnail((1600, 1600))   # resize first
+                image_array = np.array(image)   # then convert
 
                 result, _ = ocr_engine(image_array)
 
                 if result:
-
                     page_text = "\n".join(
                         line[1]
                         for line in result
                     )
+                    pages_text.append(page_text)
 
-                    pages_text.append(
-                        page_text
-                    )
+                # Explicitly free per-page memory before moving to next page.
+                # Matters a lot on small Railway memory tiers with multi-page PDFs.
+                del pix, image, image_array, result
+                gc.collect()
 
-            return "\n\n".join(
-                pages_text
-            )
+            pdf.close()
+
+            return "\n\n".join(pages_text)
 
         # IMAGE
-        image = Image.open(
-            uploaded_file
-        ).convert("RGB")
-
+        image = Image.open(uploaded_file).convert("RGB")
+        image.thumbnail((1600, 1600))
         image_array = np.array(image)
 
-        result, _ = ocr_engine(
-            image_array
-        )
+        result, _ = ocr_engine(image_array)
 
         if not result:
             return ""
@@ -82,6 +83,6 @@ def extract_text(uploaded_file):
             for line in result
         )
 
-    except Exception as e:
+    except Exception:
         logger.error("OCR extraction failed:\n%s", traceback.format_exc())
         raise
