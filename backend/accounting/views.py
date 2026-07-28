@@ -59,9 +59,9 @@ class CustomerLedgerViewSet(viewsets.ReadOnlyModelViewSet):
         elements.append(Paragraph(f"Account Statement: {customer_name}", styles['Title']))
         elements.append(Spacer(1, 12))
         
-        elements.append(Paragraph(f"<b>Total Billed (Debit):</b> ${ledger.total_debit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Total Paid (Credit):</b> ${ledger.total_credit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Current Balance:</b> ${ledger.balance}", styles['Heading2']))
+        elements.append(Paragraph(f"<b>Total Billed (Debit):</b> Rs. {ledger.total_debit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Total Paid (Credit):</b> Rs. {ledger.total_credit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Current Balance:</b> Rs. {ledger.balance}", styles['Heading2']))
         elements.append(Spacer(1, 20))
 
         # --- TRANSACTION HISTORY TABLE ---
@@ -77,7 +77,7 @@ class CustomerLedgerViewSet(viewsets.ReadOnlyModelViewSet):
                 tx.transaction_type.upper(),
                 tx.reference_number or '-',
                 tx.notes[:20] + '...' if len(tx.notes) > 20 else tx.notes, # Truncate long notes
-                f"${tx.amount:.2f}"
+                f"Rs. {tx.amount:.2f}"
             ])
 
         # Style the table
@@ -199,9 +199,9 @@ class VendorLedgerViewSet(viewsets.ReadOnlyModelViewSet):
         elements.append(Paragraph(f"Vendor Statement: {vendor_name}", styles['Title']))
         elements.append(Spacer(1, 12))
         
-        elements.append(Paragraph(f"<b>Total Billed (Credit):</b> ${ledger.total_credit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Total Paid (Debit):</b> ${ledger.total_debit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Current Balance Owed:</b> ${ledger.balance}", styles['Heading2']))
+        elements.append(Paragraph(f"<b>Total Billed (Credit):</b> Rs. {ledger.total_credit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Total Paid (Debit):</b> Rs. {ledger.total_debit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Current Balance Owed:</b> Rs. {ledger.balance}", styles['Heading2']))
         elements.append(Spacer(1, 20))
 
         table_data = [['ID', 'Type', 'Ref #', 'Notes', 'Amount']]
@@ -214,7 +214,7 @@ class VendorLedgerViewSet(viewsets.ReadOnlyModelViewSet):
                 tx.transaction_type.upper(),
                 tx.reference_number or '-',
                 tx.notes[:20] + '...' if len(tx.notes) > 20 else tx.notes,
-                f"${tx.amount:.2f}"
+                f"Rs. {tx.amount:.2f}"
             ])
 
         t = Table(table_data, colWidths=[50, 80, 100, 150, 80])
@@ -316,9 +316,9 @@ class CashAccountViewSet(viewsets.ModelViewSet):
         elements.append(Paragraph(f"Cash Account Statement: {account.name}", styles['Title']))
         elements.append(Spacer(1, 12))
         
-        elements.append(Paragraph(f"<b>Total Money In (Debit):</b> ${account.total_debit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Total Money Out (Credit):</b> ${account.total_credit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Available Cash Balance:</b> ${account.balance}", styles['Heading2']))
+        elements.append(Paragraph(f"<b>Total Money In (Debit):</b> Rs. {account.total_debit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Total Money Out (Credit):</b> Rs. {account.total_credit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Available Cash Balance:</b> Rs. {account.balance}", styles['Heading2']))
         elements.append(Spacer(1, 20))
 
         table_data = [['Date', 'Type', 'Category', 'Ref #', 'Amount']]
@@ -331,7 +331,7 @@ class CashAccountViewSet(viewsets.ModelViewSet):
                 tx.transaction_type.upper(),
                 tx.get_category_display(),
                 tx.reference_number or '-',
-                f"${tx.amount:.2f}"
+                f"Rs. {tx.amount:.2f}"
             ])
 
         t = Table(table_data, colWidths=[80, 60, 130, 90, 80])
@@ -413,9 +413,9 @@ class ExpenseAccountViewSet(viewsets.ModelViewSet):
         elements.append(Paragraph(f"Expense Statement: {account.name}", styles['Title']))
         elements.append(Spacer(1, 12))
         
-        elements.append(Paragraph(f"<b>Total Expenses (Debit):</b> ${account.total_debit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Total Refunds (Credit):</b> ${account.total_credit}", styles['Normal']))
-        elements.append(Paragraph(f"<b>Net Expense Balance:</b> ${account.balance}", styles['Heading2']))
+        elements.append(Paragraph(f"<b>Total Expenses (Debit):</b> Rs. {account.total_debit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Total Refunds (Credit):</b> Rs. {account.total_credit}", styles['Normal']))
+        elements.append(Paragraph(f"<b>Net Expense Balance:</b> Rs. {account.balance}", styles['Heading2']))
         elements.append(Spacer(1, 20))
 
         table_data = [['Date', 'Type', 'Ref #', 'Notes', 'Amount']]
@@ -428,7 +428,7 @@ class ExpenseAccountViewSet(viewsets.ModelViewSet):
                 tx.transaction_type.upper(),
                 tx.reference_number or '-',
                 tx.notes[:20] + '...' if len(tx.notes) > 20 else tx.notes,
-                f"${tx.amount:.2f}"
+                f"Rs. {tx.amount:.2f}"
             ])
 
         t = Table(table_data, colWidths=[80, 80, 100, 150, 80])

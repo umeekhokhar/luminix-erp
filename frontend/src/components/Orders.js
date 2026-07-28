@@ -254,7 +254,7 @@ function Orders() {
                         <div style={{ marginTop: '1.5rem', textAlign: 'right', borderTop: '2px dashed var(--border-color)', paddingTop: '1.5rem' }}>
                             <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)' }}>Subtotal: <span style={{fontWeight: 600, color: 'var(--text-primary)'}}>Rs. {cartSubtotal.toFixed(2)}</span></p>
                             {!isCustomer && discount > 0 && (
-                                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--error-color)' }}>Discount: -${parseFloat(discount).toFixed(2)}</p>
+                                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--error-color)' }}>Discount: -Rs. {parseFloat(discount).toFixed(2)}</p>
                             )}
                             <h3 style={{ margin: '0.5rem 0 1.5rem 0', fontSize: '1.5rem', color: 'var(--text-primary)' }}>Total: Rs. {cartTotal.toFixed(2)}</h3>
                             <button className="lux-btn primary" onClick={handleSubmitOrder} disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
@@ -292,7 +292,7 @@ function Orders() {
                                     <td>{getPaymentBadge(order.payment_type)}</td>
                                     <td>{getStatusBadge(order.status)}</td>
                                     <td>
-                                        <div className="cell-primary-text" style={{fontWeight: 600}}>${order.total_amount}</div>
+                                        <div className="cell-primary-text" style={{fontWeight: 600}}>Rs. {order.total_amount}</div>
                                         {order.discount > 0 && <div style={{fontSize: '0.75rem', color: 'var(--error-color)', marginTop: '0.2rem'}}>(Discounted)</div>}
                                     </td>
                                     <td className="text-right">

@@ -165,15 +165,15 @@ class OrderViewSet(viewsets.ModelViewSet):
             data.append([
                 item.product.name,
                 str(item.quantity),
-                f"${item.price}",
-                f"${line_total}"
+                f"Rs. {item.price}",
+                f"Rs. {line_total}"
             ])
 
         if order.discount and order.discount > 0:
-            data.append(['', '', 'SUBTOTAL:', f"${subtotal}"])
-            data.append(['', '', 'DISCOUNT:', f"-${order.discount}"])
+            data.append(['', '', 'SUBTOTAL:', f"Rs. {subtotal}"])
+            data.append(['', '', 'DISCOUNT:', f"Rs. {order.discount}"])
 
-        data.append(['', '', 'GRAND TOTAL:', f"${order.total_amount}"])
+        data.append(['', '', 'GRAND TOTAL:', f"Rs. {order.total_amount}"])
 
         t = Table(data, colWidths=[200, 80, 100, 100])
         t.setStyle(TableStyle([
