@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dashboardAPI } from '../services/api';
-// Modern icon library - minimal footprint
-import { DollarSign, ShoppingBag, AlertTriangle, CreditCard, FileText, Users, TrendingUp, Sparkles } from 'lucide-react';
+import { dashboardAPI, forecastingAPI } from '../services/api';
+import { DollarSign, ShoppingBag, RefreshCw, CreditCard, FileText, Users, TrendingUp } from 'lucide-react';
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -10,7 +9,6 @@ const Dashboard = () => {
     const [data, setData] = useState({
         total_sales_today: 0,
         total_orders_today: 0,
-        low_stock_alerts: 0,
         payments_received_today: 0,
         overdue_invoices: 0,
         total_customers: 0,
@@ -18,6 +16,7 @@ const Dashboard = () => {
     });
     const [recentOrders, setRecentOrders] = useState([]);
     const [recentInvoices, setRecentInvoices] = useState([]);
+    const [reorderAlerts, setReorderAlerts] = useState(0);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -41,6 +40,10 @@ const Dashboard = () => {
 
             const invoicesResponse = await dashboardAPI.getRecentInvoices();
             setRecentInvoices(invoicesResponse.data);
+
+            // Reorder alerts from the AI forecasting module
+            const reorderResponse = await forecastingAPI.getReorder();
+            setReorderAlerts(reorderResponse.data?.recommendations?.length || 0);
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         } finally {
@@ -62,46 +65,39 @@ const Dashboard = () => {
         <div className="lux-dashboard">
             {/* Ambient background elements for futuristic feel */}
             <div className="lux-bg-globe"></div>
-            
+
             <div className="lux-content">
                 <header className="lux-header">
                     <div className="header-text">
-                        <h1>Operations <span className="thin">Command</span></h1>
+                        <h1>Dashboard</h1>
                         <p>System Status: <span className="status-good">Optimal</span></p>
-                    </div>
-                    {/* Placeholder for future Global Search/AI command bar */}
-                    <div className="lux-global-actions">
-                        <div className="ai-status-bubble">
-                            <Sparkles size={16} className="icon-pulse" />
-                            <span>Luminix AI Active</span>
-                        </div>
                     </div>
                 </header>
 
                 {/* Primary Stats - Glassmorphism style */}
                 <div className="lux-stats-grid">
-                    <StatCard 
-                        icon={DollarSign} 
-                        label="Today's Revenue" 
+                    <StatCard
+                        icon={DollarSign}
+                        label="Today's Revenue"
                         value={`RS ${data.total_sales_today ? data.total_sales_today.toFixed(2) : '0.00'}`}
                         color="#10b981"
                     />
-                    <StatCard 
-                        icon={ShoppingBag} 
-                        label="Orders Processed" 
+                    <StatCard
+                        icon={ShoppingBag}
+                        label="Orders Processed"
                         value={data.total_orders_today || 0}
                         color="#3b82f6"
                     />
-                    <StatCard 
-                        icon={AlertTriangle} 
-                        label="Stock Deviations" 
-                        value={data.low_stock_alerts || 0}
+                    <StatCard
+                        icon={RefreshCw}
+                        label="Reorder Alerts"
+                        value={reorderAlerts || 0}
                         color="#f59e0b"
-                        alert={data.low_stock_alerts > 0}
+                        alert={reorderAlerts > 0}
                     />
-                    <StatCard 
-                        icon={Users} 
-                        label="Active Clientele" 
+                    <StatCard
+                        icon={Users}
+                        label="Total Customers"
                         value={data.total_customers || 0}
                         color="#6366f1"
                     />
@@ -112,25 +108,29 @@ const Dashboard = () => {
                     <div className="sub-stats-glass">
                         <div className="sub-stat">
                             <CreditCard size={20} color="#8b5cf6" />
-                            <span className="label">Credits Received:</span>
+                            <span className="label">Payments Received:</span>
                             <span className="value">RS {data.payments_received_today?.toFixed(2) || '0.00'}</span>
                         </div>
                         <div className="sub-stat separator"></div>
                         <div className="sub-stat">
                             <FileText size={20} color="#ef4444" />
-                            <span className="label">Overdue Delinquencies:</span>
+                            <span className="label">Overdue Invoices:</span>
                             <span className="value alert-text">{data.overdue_invoices || 0}</span>
                         </div>
                     </div>
-                    
-                    {/* FUTURE AI ELEMENT PLACEHOLDER */}
-                    <div className="ai-predictive-pane">
+
+                    {/* Links to the AI forecasting module */}
+                    <div
+                        className="ai-predictive-pane"
+                        onClick={() => navigate('/forecasting')}
+                        role="button"
+                        tabIndex={0}
+                    >
                         <TrendingUp size={24} color="#10b981" />
                         <div>
-                            <h3>Next 24h Forecast</h3>
-                            <p className="ai-placeholder-text">Enable Predictive Analytics in Settings...</p>
+                            <h3>Product Forecast</h3>
+                            <p className="ai-placeholder-text">View demand predictions for your products</p>
                         </div>
-                        <Sparkles size={20} className="ai-sparkle-corner" />
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 <div className="lux-data-section">
                     <div className="lux-card table-card">
                         <div className="card-header">
-                            <h2>Recent Logistical Streams</h2>
+                            <h2>Recent Orders</h2>
                             <span className="view-all" onClick={() => navigate('/orders')}>View All Orders</span>
                         </div>
                         {recentOrders.length > 0 ? (
@@ -147,8 +147,8 @@ const Dashboard = () => {
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Customer Identifier</th>
-                                            <th>Quantum</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -169,13 +169,13 @@ const Dashboard = () => {
                                 </table>
                             </div>
                         ) : (
-                            <div className="no-data-pane">No active streams detected.</div>
+                            <div className="no-data-pane">No recent orders.</div>
                         )}
                     </div>
 
                     <div className="lux-card table-card">
                         <div className="card-header">
-                            <h2>Financial Ledger Inflow</h2>
+                            <h2>Recent Invoices</h2>
                             <span className="view-all" onClick={() => navigate('/invoices')}>View All Invoices</span>
                         </div>
                         {recentInvoices.length > 0 ? (
@@ -184,9 +184,9 @@ const Dashboard = () => {
                                     <thead>
                                         <tr>
                                             <th>Invoice</th>
-                                            <th>Entity</th>
+                                            <th>Customer</th>
                                             <th>Amount</th>
-                                            <th>Ledger Status</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -206,7 +206,7 @@ const Dashboard = () => {
                                 </table>
                             </div>
                         ) : (
-                            <div className="no-data-pane">Ledger is balanced. No recent inflow.</div>
+                            <div className="no-data-pane">No recent invoices.</div>
                         )}
                     </div>
                 </div>
@@ -215,7 +215,7 @@ const Dashboard = () => {
     );
 };
 
-// Small reusable sub-component for the new stats design
+// Small reusable sub-component for the stats design
 const StatCard = ({ icon: Icon, label, value, color, alert }) => (
     <div className={`lux-stat-card ${alert ? 'card-alert' : ''}`}>
         <div className="card-glow" style={{ backgroundColor: color }}></div>

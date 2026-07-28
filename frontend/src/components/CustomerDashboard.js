@@ -123,12 +123,12 @@ function CustomerDashboard() {
                         <div className="stat-card highlight-box">
                             <label style={{opacity: 0.6, fontSize: '0.8rem'}}>Balance Due</label>
                             <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: balance.balance < 0 ? '#ef4444' : '#10b981' }}>
-                                ${Math.abs(balance.balance).toFixed(2)}
+                                Rs. {Math.abs(balance.balance).toFixed(2)}
                             </div>
                         </div>
                         <div className="stat-card" style={{border: '1px solid rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '8px'}}>
                             <label style={{opacity: 0.6, fontSize: '0.8rem'}}>Credit Limit</label>
-                            <div style={{ fontSize: '1.2rem' }}>${parseFloat(balance.credit_limit || 0).toFixed(2)}</div>
+                            <div style={{ fontSize: '1.2rem' }}>Rs. {parseFloat(balance.credit_limit || 0).toFixed(2)}</div>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@ function CustomerDashboard() {
                             <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)} className="lux-input">
                                 <option value="">-- Choose Product --</option>
                                 {products.map(p => (
-                                    <option key={p.id} value={p.id}>{p.name} (${p.price})</option>
+                                    <option key={p.id} value={p.id}>{p.name} (Rs. {p.price})</option>
                                 ))}
                             </select>
                         </div>
@@ -158,7 +158,7 @@ function CustomerDashboard() {
                             {orderItems.map((item, i) => (
                                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #333' }}>
                                     <span>{item.product_name} x{item.quantity}</span>
-                                    <span>${item.total}</span>
+                                    <span>Rs. {parseFloat(item.total).toFixed(2)}</span>
                                 </div>
                             ))}
                             <button className="lux-btn primary" style={{ width: '100%', marginTop: '1rem' }} onClick={handleOrderSubmit} disabled={submittingOrder}>
@@ -190,7 +190,7 @@ function CustomerDashboard() {
                                     <td><span style={{fontWeight: 600}}>{order.order_number}</span></td>
                                     <td>{new Date(order.created_at).toLocaleDateString()}</td>
                                     <td>{getStatusBadge(order.status)}</td>
-                                    <td className="text-right" style={{fontWeight: 600}}>${order.total_amount}</td>
+                                    <td className="text-right" style={{fontWeight: 600}}>Rs. {order.total_amount}</td>
                                 </tr>
                             ))
                         )}

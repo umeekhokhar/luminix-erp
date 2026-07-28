@@ -472,7 +472,7 @@ const Purchases = () => {
                                         <td><div className="cell-primary-text">{po.purchase_number || `PO-${po.id}`}</div></td>
                                         <td><div className="cell-secondary-text">{po.vendor_name}</div></td>
                                         <td><div className="cell-secondary-text">{new Date(po.purchase_date || po.created_at).toLocaleDateString()}</div></td>
-                                        <td style={{ textAlign: 'right', fontWeight: 500 }}>${parseFloat(po.total_amount || 0).toFixed(2)}</td>
+                                        <td style={{ textAlign: 'right', fontWeight: 500 }}>Rs. {parseFloat(po.total_amount || 0).toFixed(2)}</td>
                                         <td style={{ textAlign: 'center' }}>
                                             <span 
                                                 className="lux-badge"

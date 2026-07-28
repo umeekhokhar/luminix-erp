@@ -8,6 +8,8 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showContactModal, setShowContactModal] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,13 +26,18 @@ function Login() {
 
         try {
             const response = await authAPI.login(username, password);
+
             if (response.data && response.data.access) {
                 localStorage.setItem('access_token', response.data.access);
                 localStorage.setItem('refresh_token', response.data.refresh);
                 localStorage.setItem('username', username);
-                localStorage.setItem('user_role', response.data.role || 'customer');
+                localStorage.setItem(
+                    'user_role',
+                    response.data.role || 'customer'
+                );
 
                 const role = response.data.role || 'customer';
+
                 if (role === 'superadmin') {
                     navigate('/superadmin');
                 } else if (role === 'admin') {
@@ -49,10 +56,13 @@ function Login() {
 
             if (err.response?.data) {
                 const errorData = err.response.data;
+
                 if (typeof errorData === 'string') {
                     setError(errorData);
                 } else if (errorData.non_field_errors) {
-                    setError(errorData.non_field_errors[0] || 'Invalid credentials');
+                    setError(
+                        errorData.non_field_errors[0] || 'Invalid credentials'
+                    );
                 } else if (errorData.detail) {
                     setError(errorData.detail);
                 } else if (errorData.username) {
@@ -74,30 +84,44 @@ function Login() {
 
     return (
         <div className="lux-page-container login-layout">
-            
-            {/* Using lux-panel and lux-form-panel for the glassmorphism card */}
             <div className="lux-panel lux-form-panel login-card">
-                
                 <div className="login-header">
-                    <h1 style={{ color: '#fff', margin: '0 0 0.5rem 0' }}>Luminix ERP</h1>
-                    <p className="cell-secondary-text">Secure Access Portal</p>
+                    <h1
+                        style={{
+                            color: '#fff',
+                            margin: '0 0 0.5rem 0',
+                        }}
+                    >
+                        Luminix ERP
+                    </h1>
+                    <p className="cell-secondary-text">
+                        Secure Access Portal
+                    </p>
                 </div>
-                
-                {/* Using your existing error banner style */}
-                {error && <div className="lux-error-banner">{error}</div>}
-                
-                <form onSubmit={handleLogin} className="lux-form">
-                    
-                    {/* Username Input */}
+
+                {error && (
+                    <div className="lux-error-banner">
+                        {error}
+                    </div>
+                )}
+
+                <form
+                    onSubmit={handleLogin}
+                    className="lux-form"
+                >
                     <div className="lux-form-row">
                         <div className="lux-form-group">
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username">
+                                Username
+                            </label>
                             <input
                                 id="username"
                                 type="text"
                                 className="lux-input"
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) =>
+                                    setUsername(e.target.value)
+                                }
                                 required
                                 disabled={loading}
                                 autoComplete="username"
@@ -105,16 +129,19 @@ function Login() {
                         </div>
                     </div>
 
-                    {/* Password Input */}
                     <div className="lux-form-row">
                         <div className="lux-form-group">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password">
+                                Password
+                            </label>
                             <input
                                 id="password"
                                 type="password"
                                 className="lux-input"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
                                 required
                                 disabled={loading}
                                 autoComplete="current-password"
@@ -122,23 +149,94 @@ function Login() {
                         </div>
                     </div>
 
-                    {/* Using your vibrant blue gradient button */}
-                    <button 
-                        type="submit" 
-                        disabled={loading} 
+                    <button
+                        type="submit"
+                        disabled={loading}
                         className="lux-btn primary login-btn"
                     >
-                        {loading ? 'Authenticating...' : 'Sign In'}
+                        {loading
+                            ? 'Authenticating...'
+                            : 'Sign In'}
                     </button>
                 </form>
 
                 <p className="login-footer-text cell-secondary-text">
                     Don't have an account?{' '}
-                    <a href="#signup" onClick={(e) => e.preventDefault()} className="login-link">
+                    <a
+                        href="#signup"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setShowContactModal(true);
+                        }}
+                        className="login-link"
+                    >
                         Contact Administrator
                     </a>
                 </p>
             </div>
+
+            {showContactModal && (
+                <div
+                    className="lux-modal-overlay"
+                    onClick={() =>
+                        setShowContactModal(false)
+                    }
+                >
+                    <div
+                        className="lux-panel lux-modal-content"
+                        onClick={(e) =>
+                            e.stopPropagation()
+                        }
+                    >
+                        <div className="lux-modal-header">
+                            <h2
+                                style={{
+                                    color: '#fff',
+                                    margin: 0,
+                                }}
+                            >
+                                Contact Administrator
+                            </h2>
+
+                            <button
+                                className="lux-modal-close"
+                                onClick={() =>
+                                    setShowContactModal(false)
+                                }
+                                aria-label="Close"
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        <div className="lux-modal-body">
+                            <div className="contact-entry">
+                                <span className="contact-name">
+                                    Muhammad Umar
+                                </span>
+                                <a
+                                    href="tel:03146025544"
+                                    className="contact-phone"
+                                >
+                                    0314 6025544
+                                </a>
+                            </div>
+
+                            <div className="contact-entry">
+                                <span className="contact-name">
+                                    Muhammad Shahzaib
+                                </span>
+                                <a
+                                    href="tel:03154154782"
+                                    className="contact-phone"
+                                >
+                                    0315 4154782
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

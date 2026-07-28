@@ -296,3 +296,73 @@
     text-decoration: underline;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+.lux-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.lux-modal-content {
+    width: 90%;
+    max-width: 360px;
+    padding: 1.5rem;
+    animation: lux-modal-fade-in 0.2s ease-out;
+}
+
+@keyframes lux-modal-fade-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.lux-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.lux-modal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.lux-modal-close:hover {
+    opacity: 1;
+}
+
+.contact-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-entry:last-child {
+    border-bottom: none;
+}
+
+.contact-name {
+    color: #fff;
+    font-weight: 500;
+}
+
+.contact-phone {
+    color: #7dd3fc;
+    text-decoration: none;
+}
+
+.contact-phone:hover {
+    text-decoration: underline;
+}

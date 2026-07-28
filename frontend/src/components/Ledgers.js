@@ -352,22 +352,22 @@ function Ledgers() {
                                         )}
 
                                         <td className="text-right text-muted">
-                                            ${parseFloat(item.total_debit || 0).toFixed(2)}
+                                            Rs. {parseFloat(item.total_debit || 0).toFixed(2)}
                                         </td>
 
                                         <td className="text-right text-muted">
-                                            ${parseFloat(item.total_credit || 0).toFixed(2)}
+                                            Rs. {parseFloat(item.total_credit || 0).toFixed(2)}
                                         </td>
 
                                         <td className="text-right">
                                             <span className={`lux-badge ${item.balance >= 0 ? 'positive' : 'negative'}`}>
-                                                ${parseFloat(item.balance || 0).toFixed(2)}
+                                                Rs. {parseFloat(item.balance || 0).toFixed(2)}
                                             </span>
                                         </td>
 
                                         {activeTab === 'customer' && (
                                             <td className="text-right text-muted">
-                                                ${parseFloat(item.credit_limit || 0).toFixed(2)}
+                                                Rs. {parseFloat(item.credit_limit || 0).toFixed(2)}
                                             </td>
                                         )}
 
@@ -468,7 +468,7 @@ function Ledgers() {
                                             <option value="" disabled>Select a payment account...</option>
                                             {cashAccounts.map(acc => (
                                                 <option key={acc.id} value={acc.id}>
-                                                    {acc.name} (${parseFloat(acc.balance || 0).toFixed(2)})
+                                                    {acc.name} (Rs. {parseFloat(acc.balance || 0).toFixed(2)})
                                                 </option>
                                             ))}
                                         </select>
@@ -515,7 +515,7 @@ function Ledgers() {
                                 <div className="lux-form-group half">
                                     <label>Amount</label>
                                     <div className="input-with-icon">
-                                        <span className="currency-symbol">$</span>
+                                        <span className="currency-symbol">Rs. </span>
                                         <input
                                             type="number"
                                             step="0.01"

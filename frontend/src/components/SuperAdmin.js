@@ -16,7 +16,7 @@ function SuperAdmin() {
         username: '',
         email: '',
         password: '',
-        role: 'customer',
+        role: 'admin',
         first_name: '',
         last_name: '',
         is_active: true,
@@ -36,7 +36,10 @@ function SuperAdmin() {
         setLoading(true);
         try {
             const response = await superAdminAPI.listUsers();
-            setUsers(response.data);
+            // This page is scoped to admin management only — filter out
+            // customers, salesmen, and other superadmins from the list.
+            const adminsOnly = response.data.filter((u) => u.role === 'admin');
+            setUsers(adminsOnly);
             setError('');
         } catch (err) {
             setError('Failed to fetch users');
@@ -58,14 +61,18 @@ function SuperAdmin() {
         e.preventDefault();
         setError('');
         setSuccess('');
-        
+
         try {
+            // Force role to 'admin' regardless of form state, since this
+            // page only creates/edits admin accounts.
+            const payload = { ...formData, role: 'admin' };
+
             if (editingId) {
-                await superAdminAPI.updateUser(editingId, formData);
-                setSuccess('User updated successfully!');
+                await superAdminAPI.updateUser(editingId, payload);
+                setSuccess('Admin updated successfully!');
             } else {
-                await superAdminAPI.createUser(formData);
-                setSuccess('User created successfully!');
+                await superAdminAPI.createUser(payload);
+                setSuccess('Admin created successfully!');
             }
             fetchUsers();
             setShowForm(false);
@@ -82,7 +89,7 @@ function SuperAdmin() {
             username: user.username,
             email: user.email,
             password: '',
-            role: user.role,
+            role: 'admin',
             first_name: user.first_name || '',
             last_name: user.last_name || '',
             is_active: user.is_active,
@@ -91,10 +98,10 @@ function SuperAdmin() {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this user?')) {
+        if (window.confirm('Are you sure you want to delete this admin?')) {
             try {
                 await superAdminAPI.deleteUser(id);
-                setSuccess('User deleted successfully!');
+                setSuccess('Admin deleted successfully!');
                 fetchUsers();
             } catch (err) {
                 setError('Failed to delete user');
@@ -107,7 +114,7 @@ function SuperAdmin() {
             username: '',
             email: '',
             password: '',
-            role: 'customer',
+            role: 'admin',
             first_name: '',
             last_name: '',
             is_active: true,
@@ -135,12 +142,11 @@ function SuperAdmin() {
                         resetForm();
                     }}
                 >
-                    + Create User
+                    + Create Admin
                 </button>
             </div>
 
             {error && <div className="lux-error-banner">{error}</div>}
-            {/* Added an inline style for success since it wasn't in the original base CSS */}
             {success && (
                 <div className="highlight-box" style={{ borderColor: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', color: '#4ade80', marginBottom: '1.5rem', padding: '1rem' }}>
                     {success}
@@ -150,7 +156,7 @@ function SuperAdmin() {
             {showForm && (
                 <div className="lux-panel lux-form-panel">
                     <form onSubmit={handleSubmit} className="lux-form">
-                        <h2>{editingId ? 'Edit User' : 'Create New User'}</h2>
+                        <h2>{editingId ? 'Edit Admin' : 'Create New Admin'}</h2>
 
                         <div className="lux-form-row">
                             <div className="lux-form-group">
@@ -193,19 +199,13 @@ function SuperAdmin() {
                             </div>
 
                             <div className="lux-form-group">
-                                <label>Role *</label>
-                                <select
-                                    name="role"
+                                <label>Role</label>
+                                <input
+                                    type="text"
                                     className="lux-input"
-                                    value={formData.role}
-                                    onChange={handleInputChange}
-                                    required
-                                >
-                                    <option value="superadmin">Super Admin</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="salesman">Salesman</option>
-                                    <option value="customer">Customer</option>
-                                </select>
+                                    value="Admin"
+                                    disabled
+                                />
                             </div>
                         </div>
 
@@ -254,7 +254,7 @@ function SuperAdmin() {
                                 Cancel
                             </button>
                             <button type="submit" className="lux-btn primary">
-                                {editingId ? 'Update User' : 'Create User'}
+                                {editingId ? 'Update Admin' : 'Create Admin'}
                             </button>
                         </div>
                     </form>
@@ -264,10 +264,10 @@ function SuperAdmin() {
             {loading ? (
                 <div className="lux-loading-state">
                     <div className="spinner"></div>
-                    <p>Loading user data...</p>
+                    <p>Loading admin data...</p>
                 </div>
             ) : users.length === 0 ? (
-                <div className="lux-empty-state">No users found in the system.</div>
+                <div className="lux-empty-state">No admins found in the system.</div>
             ) : (
                 <div className="lux-panel lux-table-wrapper">
                     <table className="lux-table">

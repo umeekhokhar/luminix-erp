@@ -71,17 +71,17 @@ function Invoices() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                 <div className="lux-panel" style={{ borderLeft: '4px solid #10b981', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>Cash Today</h3>
-                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>${parseFloat(tally.cash).toFixed(2)}</h2>
+                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>Rs. {parseFloat(tally.cash).toFixed(2)}</h2>
                 </div>
                 
                 <div className="lux-panel" style={{ borderLeft: '4px solid #0ea5e9', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>Credit Today</h3>
-                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>${parseFloat(tally.credit).toFixed(2)}</h2>
+                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>Rs. {parseFloat(tally.credit).toFixed(2)}</h2>
                 </div>
                 
                 <div className="lux-panel" style={{ borderLeft: '4px solid #6366f1', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>Total Revenue</h3>
-                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>${parseFloat(tally.total).toFixed(2)}</h2>
+                    <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 700 }}>Rs. {parseFloat(tally.total).toFixed(2)}</h2>
                 </div>
             </div>
 
@@ -142,16 +142,16 @@ function Invoices() {
                                         <div className="cell-secondary-text">{invoice.order_number}</div>
                                     </td>
                                     <td style={{ textAlign: 'right', fontWeight: 600 }}>
-                                        ${parseFloat(invoice.total_amount).toFixed(2)}
+                                        Rs. {parseFloat(invoice.total_amount).toFixed(2)}
                                     </td>
                                     <td style={{ textAlign: 'right', color: 'var(--text-secondary)' }}>
-                                        ${parseFloat(invoice.tax_amount || 0).toFixed(2)}
+                                        Rs. {parseFloat(invoice.tax_amount || 0).toFixed(2)}
                                     </td>
                                     <td style={{ textAlign: 'right', color: '#10b981' }}>
-                                        ${parseFloat(invoice.paid_amount || 0).toFixed(2)}
+                                        Rs. {parseFloat(invoice.paid_amount || 0).toFixed(2)}
                                     </td>
                                     <td style={{ textAlign: 'right', fontWeight: 600, color: (invoice.total_amount - (invoice.paid_amount || 0)) > 0 ? 'var(--error-color)' : 'var(--text-primary)' }}>
-                                        ${parseFloat(invoice.total_amount - (invoice.paid_amount || 0)).toFixed(2)}
+                                        Rs. {parseFloat(invoice.total_amount - (invoice.paid_amount || 0)).toFixed(2)}
                                     </td>
                                     <td>
                                         <span

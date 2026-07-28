@@ -203,7 +203,7 @@ function Orders() {
 
                     {!isCustomer && (
                         <div className="lux-form-group">
-                            <label>Discount ($)</label>
+                            <label>Discount (Rs.)</label>
                             <input 
                                 type="number" 
                                 min="0" 
@@ -222,7 +222,7 @@ function Orders() {
                         <label>Product</label>
                         <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)} className="lux-input">
                             <option value="">-- Select Product --</option>
-                            {products.map(p => <option key={p.id} value={p.id}>{p.name} (${p.price}) - Stock: {p.inventory?.stock_quantity || 0}</option>)}
+                            {products.map(p => <option key={p.id} value={p.id}>{p.name} (Rs. {p.price}) - Stock: {p.inventory?.stock_quantity || 0}</option>)}
                         </select>
                     </div>
                     <div className="lux-form-group" style={{ flex: 1 }}>
@@ -242,7 +242,7 @@ function Orders() {
                                 <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', padding: '0.75rem 0' }}>
                                     <span style={{ fontWeight: 500, color: 'var(--text-secondary)' }}>{item.product_name} <span style={{color: 'var(--text-tertiary)'}}>(x{item.quantity})</span></span>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                        <span style={{ fontWeight: 600 }}>${item.total}</span>
+                                        <span style={{ fontWeight: 600 }}>Rs. {item.total}</span>
                                         <button onClick={() => handleRemoveItem(idx)} className="lux-btn-icon danger" title="Remove item">
                                             ✕
                                         </button>
@@ -252,11 +252,11 @@ function Orders() {
                         </ul>
                         
                         <div style={{ marginTop: '1.5rem', textAlign: 'right', borderTop: '2px dashed var(--border-color)', paddingTop: '1.5rem' }}>
-                            <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)' }}>Subtotal: <span style={{fontWeight: 600, color: 'var(--text-primary)'}}>${cartSubtotal.toFixed(2)}</span></p>
+                            <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)' }}>Subtotal: <span style={{fontWeight: 600, color: 'var(--text-primary)'}}>Rs. {cartSubtotal.toFixed(2)}</span></p>
                             {!isCustomer && discount > 0 && (
                                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--error-color)' }}>Discount: -${parseFloat(discount).toFixed(2)}</p>
                             )}
-                            <h3 style={{ margin: '0.5rem 0 1.5rem 0', fontSize: '1.5rem', color: 'var(--text-primary)' }}>Total: ${cartTotal.toFixed(2)}</h3>
+                            <h3 style={{ margin: '0.5rem 0 1.5rem 0', fontSize: '1.5rem', color: 'var(--text-primary)' }}>Total: Rs. {cartTotal.toFixed(2)}</h3>
                             <button className="lux-btn primary" onClick={handleSubmitOrder} disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
                                 {loading ? 'Submitting...' : 'Submit Order'}
                             </button>

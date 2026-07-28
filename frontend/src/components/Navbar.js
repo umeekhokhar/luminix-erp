@@ -44,8 +44,8 @@ function Navbar() {
                             </Link>
                         </li>
                     )}
-                    
-                    {(role === 'admin' || role === 'superadmin') && (
+
+                    {role === 'admin' && (
                         <>
                             <li className="lux-dropdown">
                                 <span className="lux-nav-link">
@@ -75,19 +75,32 @@ function Navbar() {
                                     <span>Ledgers</span>
                                 </Link>
                             </li>
-                            {/* NEW: Reports Link */}
                             <li>
                                 <Link to="/reports" className="lux-nav-link">
                                     <BarChart3 size={16} />
                                     <span>Reports</span>
                                 </Link>
                             </li>
-                            {/* NEW: AI Forecasting Link */}
                             <li>
                                 <Link to="/forecasting" className="lux-nav-link">
                                     <Brain size={16} />
                                     <span>AI Forecast</span>
                                 </Link>
+                            </li>
+                            <li className="lux-dropdown">
+                                <span className="lux-nav-link">
+                                    <Box size={16} />
+                                    <span>Inventory</span>
+                                    <ChevronDown size={14} className="drop-arrow" />
+                                </span>
+                                <ul className="lux-dropdown-menu">
+                                    <li><Link to="/products" className="lux-drop-item">Products</Link></li>
+                                    <li><Link to="/categories" className="lux-drop-item">Categories</Link></li>
+                                    <li><Link to="/stock" className="lux-drop-item">Stock</Link></li>
+                                    <li><Link to="/transactions" className="lux-drop-item">Transactions</Link></li>
+                                    <li><Link to="/vendors" className="lux-drop-item">Vendors</Link></li>
+                                    <li><Link to="/purchases" className="lux-drop-item">Purchases</Link></li>
+                                </ul>
                             </li>
                         </>
                     )}
@@ -113,31 +126,13 @@ function Navbar() {
                             </li>
                         </>
                     )}
-                    
+
                     {role === 'customer' && (
                         <li>
                             <Link to="/customer-dashboard" className="lux-nav-link">
                                 <FileText size={16} />
                                 <span>My Balance</span>
                             </Link>
-                        </li>
-                    )}
-                    
-                    {(role === 'superadmin' || role === 'admin') && (
-                        <li className="lux-dropdown">
-                            <span className="lux-nav-link">
-                                <Box size={16} />
-                                <span>Inventory</span>
-                                <ChevronDown size={14} className="drop-arrow" />
-                            </span>
-                            <ul className="lux-dropdown-menu">
-                                <li><Link to="/products" className="lux-drop-item">Products</Link></li>
-                                <li><Link to="/categories" className="lux-drop-item">Categories</Link></li>
-                                <li><Link to="/stock" className="lux-drop-item">Stock</Link></li>
-                                <li><Link to="/transactions" className="lux-drop-item">Transactions</Link></li>
-                                <li><Link to="/vendors" className="lux-drop-item">Vendors</Link></li>
-                                <li><Link to="/purchases" className="lux-drop-item">Purchases</Link></li>
-                            </ul>
                         </li>
                     )}
                 </ul>

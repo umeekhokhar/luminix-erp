@@ -190,14 +190,14 @@ function Products() {
                             <div>
                                 <label className="lux-label">Selling Price *</label>
                                 <div style={{ position: 'relative' }}>
-                                    <span style={{ position: 'absolute', left: '12px', top: '10px', color: 'var(--text-secondary)' }}>$</span>
+                                    <span style={{ position: 'absolute', left: '12px', top: '10px', color: 'var(--text-secondary)' }}>Rs. </span>
                                     <input type="number" name="price" step="0.01" value={formData.price} onChange={handleInputChange} className="lux-input" style={{ paddingLeft: '28px' }} required />
                                 </div>
                             </div>
                             <div>
                                 <label className="lux-label">Cost Price</label>
                                 <div style={{ position: 'relative' }}>
-                                    <span style={{ position: 'absolute', left: '12px', top: '10px', color: 'var(--text-secondary)' }}>$</span>
+                                    <span style={{ position: 'absolute', left: '12px', top: '10px', color: 'var(--text-secondary)' }}>Rs. </span>
                                     <input type="number" name="cost_price" step="0.01" value={formData.cost_price} onChange={handleInputChange} className="lux-input" style={{ paddingLeft: '28px' }} />
                                 </div>
                             </div>
@@ -286,7 +286,7 @@ function Products() {
                                                 {stock} Units
                                             </span>
                                         </td>
-                                        <td style={{ textAlign: 'right', fontWeight: 500 }}>${parseFloat(product.price).toFixed(2)}</td>
+                                        <td style={{ textAlign: 'right', fontWeight: 500 }}>Rs. {parseFloat(product.price).toFixed(2)}</td>
                                         <td><div className="cell-secondary-text">{product.vendor_name || '-'}</div></td>
                                         <td>
                                             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
